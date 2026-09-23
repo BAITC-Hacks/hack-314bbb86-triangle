@@ -46,7 +46,7 @@ test('quarterly effects and synergies activate after both lags, never early',()=
 });
 test('AI can allocate a full legal budget starting from an empty draft',async()=>{
  const best=executeWhatIf('global_optimum',{},[]);assert.equal(best.result.valid,true);assert.equal(best.decisions.length,5);assert.equal(best.result.cost,98);near(best.gain,best.result.score-BASELINE.score);assert.equal(best.applied,false);
- const response=await api(new Request('https://test.invalid/api/what-if',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({decisions:[],message:'Allocate budget',locale:'en'})}),{}, {id:'guest'});assert.equal(response.status,200);assert.equal((await response.json()).reason,'NO_API_KEY');
+ const response=await api(new Request('https://test.invalid/api/what-if',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({decisions:[],message:'Allocate budget',locale:'en'})}),{}, {id:'mayor',role:'mayor',kind:'account'});assert.equal(response.status,200);assert.equal((await response.json()).reason,'NO_API_KEY');
 });
 test('function calling round trip passes verified facts and retains provider call IDs',async()=>{
  const calls=[];const fetcher=async(url,options)=>{const body=JSON.parse(options.body);calls.push(body);return calls.length===1?Response.json({status:'completed',output:[{type:'function_call',id:'fc_1',call_id:'call_1',name:'evaluate_replacement',arguments:JSON.stringify({removeId:'M5',addId:'M3',districtId:'nura'})}]}):Response.json({status:'completed',output:[{type:'message',content:[{type:'output_text',text:'Verified explanation.'}]}]});};
@@ -61,24 +61,8 @@ test('provider failures return honest local status and retain any completed calc
  const ungrounded=await whatIf({decisions:EXAMPLE,message:'hello',locale:'en'},{OPENAI_API_KEY:'test-only'},async()=>Response.json({status:'completed',output:[{content:[{type:'output_text',text:'Invented'}]}]}));assert.equal(ungrounded.mode,'local');
 });
 const secret='test-secret-not-a-real-credential'.repeat(2),request=cookie=>new Request('https://test.invalid/api/config',{headers:cookie?{cookie}:{}});
-test('automatic signed workspace persists, is private, and rejects tampered cookies',async()=>{
- const a=await browserSession(request(),{SESSION_SECRET:secret,LOCAL:'1'}),cookie=a.cookie.split(';')[0];assert.match(a.cookie,/HttpOnly/);assert.match(a.cookie,/SameSite=Lax/);assert.match(a.cookie,/Secure/);
- const again=await browserSession(request(cookie),{SESSION_SECRET:secret,LOCAL:'1'});assert.equal(again.user.id,a.user.id);assert.equal(again.cookie,undefined);
- const raw=cookie.split('=')[1].split('.');raw[0]=crypto.randomUUID();const forged=await browserSession(request('akim_workspace='+raw.join('.')),{SESSION_SECRET:secret,LOCAL:'1'});assert.notEqual(forged.user.id,a.user.id);assert.ok(forged.cookie);
-});
-test('cross-origin writes rejected before cookie issuance',async()=>{
- let called=false;const response=await withBrowserSession(new Request('https://test.invalid/api/scenarios',{method:'POST',headers:{origin:'https://untrusted.invalid'}}),{SESSION_SECRET:secret},()=>{called=true;return Response.json({});});assert.equal(response.status,403);assert.equal(response.headers.get('set-cookie'),null);assert.equal(called,false);
-});
-test('browser workspace scenario ownership isolates two anonymous visitors',async()=>{
- const db=openDatabase(':memory:'),env={DB:db,SESSION_SECRET:secret,LOCAL:'1'};
- try{const owner=await browserSession(request(),env),other=await browserSession(request(),env);const created=await api(new Request('https://test.invalid/api/scenarios',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({name:'Private test',team:'Test',decisions:EXAMPLE})}),env,owner.user);assert.equal(created.status,201);const id=(await created.json()).scenario.id;assert.equal((await api(new Request(`https://test.invalid/api/scenarios/${id}`),env,other.user)).status,404);}finally{db.close();}
-});
-test('legacy local workspace migrates into a signed browser identity',async()=>{
- const db=openDatabase(':memory:'),id=crypto.randomUUID(),env={DB:db,SESSION_SECRET:secret,LOCAL:'1'};
- try{await api(new Request('https://test.invalid/api/scenarios',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({name:'Legacy',team:'Test',decisions:EXAMPLE})}),env,{id:'local:'+id});const session=await browserSession(request('akim_local='+id),env);assert.equal(session.user.id,'guest:'+id);const response=await api(new Request('https://test.invalid/api/scenarios'),env,session.user);assert.equal((await response.json()).scenarios.length,1);}finally{db.close();}
-});
-test('IP limit bounds cookie-reset attempts across anonymous workspaces',async()=>{
+test('IP limit bounds attempts across authenticated accounts',async()=>{
  const db=openDatabase(':memory:');try{let provider=0;const env={DB:db,OPENAI_API_KEY:'test-only',FETCHER:async()=>{provider++;return new Response('',{status:503});}};let response;
- for(let i=0;i<7;i++){const req=new Request('https://test.invalid/api/what-if',{method:'POST',headers:{'content-type':'application/json','cf-connecting-ip':'192.0.2.1'},body:JSON.stringify({decisions:EXAMPLE,message:'best',locale:'en'})});response=await api(req,env,{id:'visitor'+i});}
+ for(let i=0;i<7;i++){const req=new Request('https://test.invalid/api/what-if',{method:'POST',headers:{'content-type':'application/json','cf-connecting-ip':'192.0.2.1'},body:JSON.stringify({decisions:EXAMPLE,message:'best',locale:'en'})});response=await api(req,env,{id:'visitor'+i,role:'manager',kind:'account'});}
  assert.equal(provider,6);assert.equal((await response.json()).reason,'AI_LIMIT');}finally{db.close();}
 });

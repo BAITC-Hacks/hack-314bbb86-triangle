@@ -1,6 +1,6 @@
 {
   "name": "triangle-akim-city-lab",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -13,7 +13,8 @@
     "test": "node --experimental-sqlite --test tests/*.test.mjs",
     "db:generate": "drizzle-kit generate",
     "optimize": "node scripts/optimize.mjs",
-    "verify:optimum": "node scripts/verify-optimum.mjs"
+    "verify:optimum": "node scripts/verify-optimum.mjs",
+    "accounts:create": "node scripts/create-demo-accounts.mjs"
   },
   "dependencies": {
     "leaflet": "1.9.4",

@@ -1,8 +1,9 @@
-import {simulate,validate} from '../shared/engine.mjs';
+import {simulate,validate,calculate} from '../shared/engine.mjs';
 import {VERSION} from '../shared/data.mjs';
 import {factsFor,localReport,explain} from './advisor.mjs';
 import {rows,one,run,quota,hash} from './database.mjs';
 import {whatIf} from './what-if.mjs';
+import {login,logout,canEdit} from './session.mjs';
 const json=(data,status=200,headers={})=>new Response(JSON.stringify(data),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store',...headers}});
 const fail=(code,status=400)=>json({error:code},status);
 const cleanName=(value,max)=>typeof value==='string'&&value.trim().length>0&&value.trim().length<=max?value.trim():null;
@@ -23,19 +24,38 @@ export async function api(request,env,identity=null) {
  try {
  const url=new URL(request.url),path=url.pathname,method=request.method,db=env.DB;
  const user=identity;
- if(method==='GET'&&path==='/api/config')return json({version:VERSION,budget:100,horizon:8,aiConfigured:Boolean(env.OPENAI_API_KEY),user:user?{name:user.name,kind:user.kind||'browser'}:null,local:env.LOCAL==='1'});
+ if(method==='GET'&&path==='/api/config')return json({version:VERSION,budget:100,horizon:8,aiConfigured:Boolean(env.OPENAI_API_KEY),authConfigured:Boolean(env.AUTH_ACCOUNTS),canEdit:canEdit(user),user:user?{id:user.id,name:user.name,email:user.email,role:user.role,kind:user.kind}:null,local:env.LOCAL==='1'});
  if(method!=='GET'&&request.headers.get('origin')&&request.headers.get('origin')!==url.origin)return fail('ORIGIN_DENIED',403);
+ if(path==='/api/auth/login'&&method==='POST')return login(request,env,await readBody(request));
+ if(path==='/api/auth/logout'&&method==='POST')return logout(request,env);
+ const protectedRoute=path.startsWith('/api/scenarios')||path==='/api/draft'||['/api/analyze','/api/what-if','/api/simulate'].includes(path);
+ if(protectedRoute&&!canEdit(user))return fail(user?'FORBIDDEN':'AUTH_REQUIRED',user?403:401);
+ if(protectedRoute&&request.headers.get('x-akim-account-id')&&request.headers.get('x-akim-account-id')!==user.id)return fail('ACCOUNT_CHANGED',409);
+ if(path==='/api/draft'){
+  if(!db)return fail('DATABASE_UNAVAILABLE',503);
+  if(method==='GET'){const draft=await one(db,'SELECT * FROM drafts WHERE owner_id=?',user.id);return json({decisions:draft?JSON.parse(draft.decisions_json):[],revision:draft?.revision||0});}
+  if(method==='PUT'){
+   const input=await readBody(request),check=validate(input?.decisions,{partial:true});if(!check.valid)return json(check,400);
+   if(!Number.isInteger(input.revision)||input.revision<0)return fail('INVALID_REVISION');
+   const now=new Date().toISOString();
+   await run(db,"INSERT OR IGNORE INTO drafts (owner_id,decisions_json,revision,updated_at) VALUES (?,'[]',0,?)",user.id,now);
+   const result=await run(db,'UPDATE drafts SET decisions_json=?,revision=revision+1,updated_at=? WHERE owner_id=? AND revision=?',JSON.stringify(input.decisions),now,user.id,input.revision);
+   return result.meta.changes?json({ok:true,revision:input.revision+1}):fail('DRAFT_CONFLICT',409);
+  }
+ }
  if(path==='/api/simulate'&&method==='POST'){
   const input=await readBody(request),result=simulate(input?.decisions);return json(result,result.valid?200:400);
  }
  if(path==='/api/analyze'&&method==='POST'){
-  const input=await readBody(request),result=simulate(input?.decisions);if(!result.valid)return json(result,400);
-  const locale=['kk','ru','en'].includes(input.locale)?input.locale:'kk',facts=factsFor(input.decisions,result,locale);
+  const input=await readBody(request),check=validate(input?.decisions,{partial:Boolean(input?.districtId)});if(!check.valid)return json(check,400);
+  if(input.districtId&&!['esil','almaty','saryarka','baikonur','nura'].includes(input.districtId))return fail('INVALID_DISTRICT');
+  const result=input.districtId?{...calculate(input.decisions),valid:true}:simulate(input.decisions);
+  const locale=['kk','ru','en'].includes(input.locale)?input.locale:'kk',facts=factsFor(input.decisions,result,locale,input.districtId);
   const base={result,recommendations:facts.recommendations};
   if(!user)return fail('WORKSPACE_UNAVAILABLE',503);
   if(!env.OPENAI_API_KEY)return json({...base,mode:'local',reason:'NO_API_KEY',report:localReport(facts,locale)});
   if(!db)return fail('DATABASE_UNAVAILABLE',503);
-  const key=await hash(JSON.stringify({d:[...input.decisions].sort((a,b)=>a.measureId.localeCompare(b.measureId)),locale,reportVersion:4,version:VERSION,model:env.OPENAI_MODEL||'gpt-4.1-mini'}));
+  const key=await hash(JSON.stringify({d:[...input.decisions].sort((a,b)=>a.measureId.localeCompare(b.measureId)),districtId:input.districtId||null,locale,reportVersion:5,version:VERSION,model:env.OPENAI_MODEL||'gpt-4.1-mini'}));
   const cache=await one(db,'SELECT response_json FROM analyses WHERE id=?',key);
   if(cache)return json({...base,...JSON.parse(cache.response_json),cached:true});
   const day=new Date().toISOString().slice(0,10),minute=new Date().toISOString().slice(0,16);

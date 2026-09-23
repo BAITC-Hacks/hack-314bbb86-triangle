@@ -1,0 +1,129 @@
+{
+  "endpoint": "https://api.openstreetmap.org/api/0.6/map.json",
+  "queryType": "official-osm-map-api-multiple-bboxes",
+  "retrievedAt": "2026-09-23T12:08:18.349Z",
+  "regions": [
+    {
+      "id": "esil",
+      "center": [
+        71.432,
+        51.13
+      ],
+      "bbox": [
+        71.414,
+        51.121,
+        71.451,
+        51.139
+      ],
+      "endpoint": "https://api.openstreetmap.org/api/0.6/map.json?bbox=71.414,51.121,71.451,51.139",
+      "retrievedAt": "2026-09-23T12:04:49.792Z"
+    },
+    {
+      "id": "nura",
+      "center": [
+        71.392,
+        51.136
+      ],
+      "bbox": [
+        71.386,
+        51.132,
+        71.398,
+        51.14
+      ],
+      "endpoint": "https://api.openstreetmap.org/api/0.6/map.json?bbox=71.386,51.132,71.398,51.14",
+      "retrievedAt": "2026-09-23T12:08:15.576Z",
+      "elementCount": 1701
+    },
+    {
+      "id": "saryarka",
+      "center": [
+        71.408,
+        51.183
+      ],
+      "bbox": [
+        71.402,
+        51.179,
+        71.414,
+        51.187
+      ],
+      "endpoint": "https://api.openstreetmap.org/api/0.6/map.json?bbox=71.402,51.179,71.414,51.187",
+      "retrievedAt": "2026-09-23T12:08:16.514Z",
+      "elementCount": 3081
+    },
+    {
+      "id": "baikonur",
+      "center": [
+        71.464,
+        51.181
+      ],
+      "bbox": [
+        71.458,
+        51.177,
+        71.47,
+        51.185
+      ],
+      "endpoint": "https://api.openstreetmap.org/api/0.6/map.json?bbox=71.458,51.177,71.47,51.185",
+      "retrievedAt": "2026-09-23T12:08:17.387Z",
+      "elementCount": 1510
+    },
+    {
+      "id": "almaty",
+      "center": [
+        71.482,
+        51.156
+      ],
+      "bbox": [
+        71.476,
+        51.152,
+        71.488,
+        51.16
+      ],
+      "endpoint": "https://api.openstreetmap.org/api/0.6/map.json?bbox=71.476,51.152,71.488,51.16",
+      "retrievedAt": "2026-09-23T12:08:18.234Z",
+      "elementCount": 2673
+    }
+  ],
+  "elements": 48535,
+  "notes": "Central Esil area plus four small representative urban fragments. This is not complete coverage of the five districts. Each center was checked inside the corresponding OSM administrative boundary. Region bboxes use [west,south,east,north].",
+  "featureCount": 5858,
+  "counts": {
+    "building": 1281,
+    "road_area": 20,
+    "park": 1166,
+    "building_part": 137,
+    "water": 19,
+    "road": 3228,
+    "waterway": 7
+  },
+  "buildingHeights": {
+    "levels_times_3m_assumption": 676,
+    "fallback_8m": 703,
+    "osm_height": 39
+  },
+  "dropped": {
+    "tainted": 26,
+    "unclassified": 851,
+    "unsupportedGeometry": 1939
+  },
+  "outputBytes": 2446533,
+  "sha256": "23934580fc7791d372bcc51208579f786cc850f198054a7e8983520d00dd2fd2",
+  "license": "ODbL-1.0",
+  "attribution": "© OpenStreetMap contributors",
+  "copyrightUrl": "https://www.openstreetmap.org/copyright",
+  "dataLicenseUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+  "converter": "osmtogeojson@3.0.0-beta.5 (MIT; JSON input)",
+  "geometryProcessing": "Original OSM ways/multipolygons, including holes; coordinates rounded to 6 decimals, no geometry simplification. Features selected by bbox, not geometrically clipped.",
+  "heightPolicy": {
+    "osm_height": "Parsed OSM height in metres or converted feet. OSM community value, not independently surveyed.",
+    "levels_times_3m_assumption": "OSM building:levels multiplied by illustrative 3 metres per storey; height_estimated=true.",
+    "fallback_8m": "No usable height or levels. Illustrative 8 metre extrusion above render_min_height_m: total render_height_m = render_min_height_m + 8; fallback_height=true and height_estimated=true."
+  },
+  "renderingAdvice": [
+    "Use query bbox for camera extent; ways or multipolygons may extend outside it.",
+    "Separate building_part features from full building footprints to avoid overlapping duplicate extrusions.",
+    "render_height_m is the top above ground; render_min_height_m is its base. Extrusion depth is top minus base.",
+    "Do not present levels-derived or fallback heights as measured building heights.",
+    "Road polygons are kind road_area; roads/waterways are centreline geometry and width is a rendering choice unless tagged.",
+    "Park geometry includes tagged grass and forest areas; inspect leisure/landuse before claiming a formal public park."
+  ]
+}

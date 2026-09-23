@@ -1,20 +1,17 @@
 import http from 'node:http';
-import {readFile,writeFile} from 'node:fs/promises';
+import {readFile} from 'node:fs/promises';
 import {resolve,extname} from 'node:path';
-import {randomBytes} from 'node:crypto';
 import {api} from './api.mjs';
 import {openDatabase} from './sqlite.mjs';
 import {withBrowserSession} from './session.mjs';
 const db=openDatabase(),production=process.argv.includes('--production');
-let sessionSecret=process.env.SESSION_SECRET;
-if(!sessionSecret){try{sessionSecret=await readFile('.data/session-secret','utf8');}catch{sessionSecret=randomBytes(48).toString('hex');await writeFile('.data/session-secret',sessionSecret,{flag:'wx'});}}
 const vite=production?null:await (await import('vite')).createServer({server:{middlewareMode:true},appType:'spa'});
 const server=http.createServer(async(req,res)=>{
  try {
   const url=new URL(req.url,`http://${req.headers.host}`);
   if(url.pathname.startsWith('/api/')){
    const request=new Request(url,{method:req.method,headers:req.headers,...(!['GET','HEAD'].includes(req.method)?{body:req,duplex:'half'}:{})});
-   const env={...process.env,DB:db,LOCAL:'1',SESSION_SECRET:sessionSecret};
+   const env={...process.env,DB:db,LOCAL:'1'};
    const response=await withBrowserSession(request,env,user=>api(request,env,user));
    res.writeHead(response.status,Object.fromEntries(response.headers));res.end(Buffer.from(await response.arrayBuffer()));return;
   }
