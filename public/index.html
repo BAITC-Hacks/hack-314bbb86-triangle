@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#142c42"><meta name="description" content="Примите пять городских решений и узнайте, как они повлияют на качество жизни в Астане.">
+  <title>Аким на 5 часов — Triangle</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/app.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">К симулятору</a>
+  <aside class="rail">
+    <a class="brand" href="/" aria-label="Triangle — главная"><span class="brand-mark">△</span><span>triangle<span class="brand-sub">urban lab</span></span></a>
+    <div class="rail-caption">Рабочее пространство</div>
+    <nav aria-label="Разделы"><a href="#main" class="active"><span>▦</span> Симулятор</a><a href="#catalog"><span>⊞</span> Инициативы</a><a href="#analysis"><span>✧</span> Советник</a><a href="#comparison"><span>⇄</span> Сценарии</a><a href="#method"><span>ⓘ</span> Как это работает</a></nav>
+    <div class="rail-bottom"><span class="status-dot"></span> Astana Innovations<p>Трек 12 · Команда Triangle</p><small>Учебная модель города.<br>Синтетические данные.</small></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><span>Городская лаборатория <span class="crumb">/ Астана</span></span><span class="top-status"><span class="status-dot"></span> Горизонт: 2 года</span></header>
+    <main id="main">
+      <section class="intro"><div><div class="intro-kicker">Ваш город. Ваши решения.</div><h1>Аким на 5 часов</h1><p>Пять решений сегодня. Другая жизнь города завтра.</p></div><button id="demo" class="button secondary">Загрузить пример <span>↗</span></button></section>
+      <div class="simulation-grid">
+        <div class="city-column">
+          <section class="city-board" aria-labelledby="city-title">
+            <div class="section-heading"><div><h2 id="city-title">Пульс города</h2><p>Выберите район и изучите его потребности</p></div><div class="segmented" aria-label="Отображение карты"><button id="show-base" aria-pressed="false">Сейчас</button><button id="show-preview" aria-pressed="true">Прогноз</button></div></div>
+            <div class="city-map"><svg id="district-map" viewBox="0 0 760 365" role="group" aria-label="Условная схема пяти районов Астаны">
+              <defs><pattern id="blocks" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M0 10H28 M10 0V28" stroke="#fff" stroke-width="1" opacity=".48"/></pattern></defs>
+              <rect width="760" height="365" fill="#f2f7f8"/>
+              <g class="map-areas">
+                <g class="district" id="map-saryarka" data-district="saryarka" role="button" tabindex="0" aria-label="Сарыарка"><path d="M42 44L253 27 307 132 254 173 70 162Z"/><path class="grid-fill" d="M42 44L253 27 307 132 254 173 70 162Z"/><text x="155" y="92">Сарыарка</text><text class="map-value" x="155" y="122"></text></g>
+                <g class="district" id="map-baikonur" data-district="baikonur" role="button" tabindex="0" aria-label="Байконур"><path d="M269 27L475 41 491 132 383 183 321 130Z"/><path class="grid-fill" d="M269 27L475 41 491 132 383 183 321 130Z"/><text x="379" y="86">Байконур</text><text class="map-value" x="379" y="116"></text></g>
+                <g class="district" id="map-almaty" data-district="almaty" role="button" tabindex="0" aria-label="Алматы"><path d="M491 43L693 68 723 240 582 262 508 151Z"/><path class="grid-fill" d="M491 43L693 68 723 240 582 262 508 151Z"/><text x="609" y="145">Алматы</text><text class="map-value" x="609" y="175"></text></g>
+                <g class="district" id="map-nura" data-district="nura" role="button" tabindex="0" aria-label="Нура"><path d="M77 183L251 195 341 270 309 337 104 317 38 256Z"/><path class="grid-fill" d="M77 183L251 195 341 270 309 337 104 317 38 256Z"/><text x="182" y="246">Нура</text><text class="map-value" x="182" y="277"></text></g>
+                <g class="district" id="map-esil" data-district="esil" role="button" tabindex="0" aria-label="Есиль"><path d="M287 183L378 203 496 167 570 283 528 335 329 338 360 267Z"/><path class="grid-fill" d="M287 183L378 203 496 167 570 283 528 335 329 338 360 267Z"/><text x="443" y="258">Есиль</text><text class="map-value" x="443" y="288"></text></g>
+              </g>
+              <path class="river" d="M5 174C102 150 194 202 257 183S316 131 361 187 455 141 492 155 545 282 587 278 693 255 760 281"/>
+              <text class="river-label" x="628" y="283">Есіл</text><g class="compass"><path d="M716 17V44M709 26L716 17 723 26"/><text x="716" y="58">С</text></g>
+            </svg><div class="map-footnote"><span><i class="legend-dot"></i> Показатель качества жизни района</span><span>Условная схема · не географическая карта</span></div></div>
+            <div id="district-detail" class="district-detail"></div>
+          </section>
+          <section id="catalog" class="catalog"><div class="section-heading"><div><h2>Во что инвестируем?</h2><p>14 инициатив. Один бюджет. Выберите пять.</p></div><span class="quiet-badge">8 кварталов</span></div><div id="filters" class="filters" role="group" aria-label="Направления"></div><div id="measure-list" class="measure-list"></div></section>
+        </div>
+        <aside class="decision-column" aria-label="Ваш сценарий">
+          <section class="budget-panel"><div class="section-heading"><h2>Ваш бюджет</h2><span class="quiet-badge">100 ед.</span></div><div class="budget-number"><strong id="budget-left">100</strong><span>осталось<br>из 100 единиц</span></div><div id="budget-bar" class="budget-bar"></div><p id="budget-description" class="muted">Инвестировано 0 единиц</p>
+            <div class="plan-heading"><h3>Пять решений</h3><span id="decision-count">0 / 5</span></div><ol id="decision-list" class="decision-list"></ol><div id="message" class="message" role="status" aria-live="polite"></div>
+            <div class="score-preview"><div><span id="score-label">Исходный Score</span><small>Astana Quality of Life</small></div><strong id="score-value"></strong><span id="score-delta"></span></div>
+            <button id="analyze" class="button primary" disabled>Рассчитать и получить анализ <span>✧</span></button><button id="reset" class="text-button">Начать заново</button><p class="panel-note">Ровно 5 разных мер. Не более 2 из одного направления. Расчёт учитывает сроки и совместимость.</p>
+          </section>
+          <section class="city-note"><span class="note-icon">◎</span><div><h3>Город — это все районы</h3><p>30% итогового балла зависит от самого слабого района. Инвестиции в Нуру могут изменить результат всего города.</p></div></section>
+        </aside>
+      </div>
+      <section id="analysis" class="result-section"><div class="section-heading"><div><h2>Результат и советник</h2><p>Понятные последствия ваших решений</p></div><span id="ai-status" class="quiet-badge">Проверяем подключение…</span></div><div id="result-content" class="empty-state"><span>✧</span><h3>Соберите свой сценарий</h3><p>Выберите пять инициатив, затем запустите расчёт.<br>Здесь появятся результат, риски и варианты улучшения.</p></div></section>
+      <section id="comparison" class="comparison-section"><div class="section-heading"><div><h2>Сравнение сценариев</h2><p>Сохранены только в этом браузере · до 8 вариантов</p></div></div><form id="save-form" class="save-form"><label for="scenario-name">Название сценария</label><input id="scenario-name" maxlength="80" placeholder="Например, приоритет — Нура"><button id="save" class="button secondary" disabled>Сохранить сценарий</button></form><div id="saved-list"></div></section>
+      <details id="method" class="method"><summary>Как считается Astana Quality of Life Score?</summary><div><p>Все начинают со 100 условных единиц и одинаковых синтетических данных. Все показатели от 0 до 100: чем выше, тем лучше. Горизонт — 8 кварталов.</p><code>Эффект = полный эффект × (8 − лаг) / 8 + синергии</code><code>Score = 0,7 × среднее по населению + 0,3 × слабейший район − критические показатели</code><p>Критический показатель — строго меньше 40. Бонус синергии не уменьшается лагом. Показатели ограничены диапазоном 0–100 после суммирования всех эффектов. Деньги в остатке не дают бонуса.</p><p>Ровно пять разных мер, не более двух из одного направления. Для районных мер нужен район, общегородские влияют на все пять. Полосы и ЛРТ несовместимы; парк и школа, чистое топливо и модернизация сетей несовместимы в одном районе.</p><p>Веса: транспорт 20%, экология 20%, соцсфера 22%, безопасность 18%, сервисы 20%. Это учебная модель, а не прогноз реальной городской политики. AI объясняет серверный расчёт и не определяет числовой результат.</p></div></details>
+      <footer>Triangle urban lab <span>Аким на 5 часов · Astana Innovations · 2026</span></footer>
+    </main>
+  </div>
+</body>
+</html>
