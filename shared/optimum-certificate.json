@@ -1,0 +1,310 @@
+{
+  "algorithm": "Exhaustive increasing-index 5-measure subsets and every district assignment; exact integer scoring",
+  "modelVersion": "astana-synthetic-v1",
+  "dataFingerprint": "{\"BUDGET\":100,\"HORIZON\":8,\"DISTRICTS\":[{\"id\":\"esil\",\"name\":\"Есиль\",\"population\":0.27,\"metrics\":{\"T1\":45,\"T2\":62,\"E1\":68,\"E2\":72,\"S1\":48,\"S2\":55,\"B1\":78,\"B2\":60,\"C1\":75,\"C2\":70},\"profile\":\"Пробки на мостах и переполненные школы.\"},{\"id\":\"almaty\",\"name\":\"Алматы\",\"population\":0.24,\"metrics\":{\"T1\":40,\"T2\":75,\"E1\":50,\"E2\":55,\"S1\":60,\"S2\":65,\"B1\":62,\"B2\":52,\"C1\":50,\"C2\":60},\"profile\":\"Пробки и изношенные коммунальные сети.\"},{\"id\":\"saryarka\",\"name\":\"Сарыарка\",\"population\":0.2,\"metrics\":{\"T1\":50,\"T2\":70,\"E1\":42,\"E2\":40,\"S1\":62,\"S2\":68,\"B1\":58,\"B2\":55,\"C1\":45,\"C2\":55},\"profile\":\"Зимний смог и нехватка зелёных пространств.\"},{\"id\":\"baikonur\",\"name\":\"Байконур\",\"population\":0.13,\"metrics\":{\"T1\":52,\"T2\":68,\"E1\":55,\"E2\":50,\"S1\":58,\"S2\":60,\"B1\":52,\"B2\":58,\"C1\":55,\"C2\":58},\"profile\":\"Сбалансированные показатели, есть запас для роста.\"},{\"id\":\"nura\",\"name\":\"Нура\",\"population\":0.16,\"metrics\":{\"T1\":55,\"T2\":40,\"E1\":45,\"E2\":65,\"S1\":38,\"S2\":35,\"B1\":55,\"B2\":50,\"C1\":60,\"C2\":50},\"profile\":\"Дефицит школ, медицинской помощи и транспорта.\"}],\"MEASURES\":[{\"id\":\"M1\",\"category\":\"transport\",\"name\":\"Выделенные полосы для автобусов\",\"scope\":\"district\",\"cost\":18,\"lag\":2,\"effects\":{\"T1\":6,\"T2\":9},\"description\":\"Сократить время поездки и сделать автобус предсказуемым.\"},{\"id\":\"M2\",\"category\":\"transport\",\"name\":\"Умные светофоры\",\"scope\":\"city\",\"cost\":22,\"lag\":2,\"effects\":{\"T1\":4,\"B2\":3},\"description\":\"Адаптивное управление перекрёстками по всему городу.\"},{\"id\":\"M3\",\"category\":\"transport\",\"name\":\"Линия ЛРТ / расширение\",\"scope\":\"district\",\"cost\":30,\"lag\":4,\"effects\":{\"T1\":16,\"T2\":20,\"E2\":4},\"description\":\"Масштабное транспортное решение с длинным сроком реализации.\"},{\"id\":\"M4\",\"category\":\"ecology\",\"name\":\"Новый парк или сквер\",\"scope\":\"district\",\"cost\":15,\"lag\":2,\"effects\":{\"E1\":12,\"E2\":3,\"B1\":2},\"description\":\"Зелёное пространство рядом с домом.\"},{\"id\":\"M5\",\"category\":\"ecology\",\"name\":\"Чистое топливо для частного сектора\",\"scope\":\"district\",\"cost\":25,\"lag\":3,\"effects\":{\"E2\":14,\"C1\":4},\"description\":\"Снизить зимний смог и улучшить надёжность теплоснабжения.\"},{\"id\":\"M6\",\"category\":\"ecology\",\"name\":\"Озеленение и ветрозащитные полосы\",\"scope\":\"city\",\"cost\":20,\"lag\":4,\"effects\":{\"E1\":5,\"E2\":3},\"description\":\"Системное озеленение всех пяти районов.\"},{\"id\":\"M7\",\"category\":\"social\",\"name\":\"Модульная школа и детсад\",\"scope\":\"district\",\"cost\":24,\"lag\":3,\"effects\":{\"S1\":16},\"description\":\"Снизить дефицит мест в растущем районе.\"},{\"id\":\"M8\",\"category\":\"social\",\"name\":\"Центр семейного здоровья\",\"scope\":\"district\",\"cost\":20,\"lag\":3,\"effects\":{\"S2\":14},\"description\":\"Приблизить первичную медицинскую помощь к жителям.\"},{\"id\":\"M9\",\"category\":\"social\",\"name\":\"Дворовые спорт-хабы\",\"scope\":\"district\",\"cost\":10,\"lag\":1,\"effects\":{\"S1\":3,\"S2\":3,\"B1\":3},\"description\":\"Быстрые локальные улучшения для здоровья и общения.\"},{\"id\":\"M10\",\"category\":\"safety\",\"name\":\"Освещение и камеры Safe City\",\"scope\":\"district\",\"cost\":12,\"lag\":1,\"effects\":{\"B1\":12,\"B2\":2},\"description\":\"Осветить улицы и расширить систему безопасности.\"},{\"id\":\"M11\",\"category\":\"safety\",\"name\":\"Безопасные переходы и школьные зоны\",\"scope\":\"district\",\"cost\":10,\"lag\":1,\"effects\":{\"B2\":12,\"T1\":-2},\"description\":\"Безопасность пешеходов ценой небольшого замедления движения.\"},{\"id\":\"M12\",\"category\":\"services\",\"name\":\"Единая платформа обращений\",\"scope\":\"city\",\"cost\":14,\"lag\":1,\"effects\":{\"C2\":5},\"description\":\"Ускорить решение обращений во всех районах.\"},{\"id\":\"M13\",\"category\":\"services\",\"name\":\"Модернизация тепло- и водосетей\",\"scope\":\"district\",\"cost\":28,\"lag\":4,\"effects\":{\"C1\":18,\"E2\":2},\"description\":\"Обновить изношенные сети с учётом срока строительства.\"},{\"id\":\"M14\",\"category\":\"services\",\"name\":\"Аварийные бригады и оповещение\",\"scope\":\"city\",\"cost\":16,\"lag\":1,\"effects\":{\"C1\":5,\"C2\":2},\"description\":\"Быстрее реагировать на коммунальные аварии.\"}],\"METRICS\":{\"T1\":{\"name\":\"Разгрузка дорог\",\"weight\":0.1,\"category\":\"transport\"},\"T2\":{\"name\":\"Общественный транспорт\",\"weight\":0.1,\"category\":\"transport\"},\"E1\":{\"name\":\"Озеленение\",\"weight\":0.09,\"category\":\"ecology\"},\"E2\":{\"name\":\"Качество воздуха\",\"weight\":0.11,\"category\":\"ecology\"},\"S1\":{\"name\":\"Школы и детсады\",\"weight\":0.11,\"category\":\"social\"},\"S2\":{\"name\":\"Первичная медпомощь\",\"weight\":0.11,\"category\":\"social\"},\"B1\":{\"name\":\"Безопасность улиц\",\"weight\":0.09,\"category\":\"safety\"},\"B2\":{\"name\":\"Дорожная безопасность\",\"weight\":0.09,\"category\":\"safety\"},\"C1\":{\"name\":\"Надёжность ЖКХ\",\"weight\":0.1,\"category\":\"services\"},\"C2\":{\"name\":\"Обращения жителей\",\"weight\":0.1,\"category\":\"services\"}},\"SYNERGIES\":[{\"pair\":[\"M1\",\"M2\"],\"effects\":{\"T1\":2},\"label\":\"Полосы + светофоры\"},{\"pair\":[\"M10\",\"M12\"],\"effects\":{\"B1\":2},\"label\":\"Safe City + обращения\"},{\"pair\":[\"M5\",\"M6\"],\"effects\":{\"E2\":2},\"label\":\"Чистое топливо + озеленение\"}]}",
+  "modelSourceSha256": "49a6ee4b26c7b78e6093b0bf5aa9e40050ab79899c4e4c2516b30e7a9e172dfc",
+  "scoreDenominator": 800000,
+  "validMeasureSetsBeforeLocalConflicts": 1181,
+  "districtAssignmentsBeforeLocalConflicts": 736765,
+  "feasibleScenarios": 694395,
+  "uniqueDecisionSets": true,
+  "bestScoreNumerator": 45789388,
+  "bestScore": 57.236735,
+  "optimalScenarioCount": 1,
+  "baseline": 52.557680000000005,
+  "best": {
+    "numerator": 45789388,
+    "score": 57.236735,
+    "cost": 98,
+    "decisions": [
+      {
+        "measureId": "M2"
+      },
+      {
+        "measureId": "M3",
+        "districtId": "nura"
+      },
+      {
+        "measureId": "M8",
+        "districtId": "nura"
+      },
+      {
+        "measureId": "M9",
+        "districtId": "nura"
+      },
+      {
+        "measureId": "M14"
+      }
+    ]
+  },
+  "top10": [
+    {
+      "numerator": 45789388,
+      "score": 57.236735,
+      "cost": 98,
+      "decisions": [
+        {
+          "measureId": "M2"
+        },
+        {
+          "measureId": "M3",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M8",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M9",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M14"
+        }
+      ]
+    },
+    {
+      "numerator": 45780436,
+      "score": 57.225545,
+      "cost": 91,
+      "decisions": [
+        {
+          "measureId": "M3",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M4",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M8",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M9",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M14"
+        }
+      ]
+    },
+    {
+      "numerator": 45764448,
+      "score": 57.20556,
+      "cost": 100,
+      "decisions": [
+        {
+          "measureId": "M3",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M7",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M8",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M10",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M12"
+        }
+      ]
+    },
+    {
+      "numerator": 45750772,
+      "score": 57.188465,
+      "cost": 88,
+      "decisions": [
+        {
+          "measureId": "M3",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M8",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M9",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M10",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M14"
+        }
+      ]
+    },
+    {
+      "numerator": 45737388,
+      "score": 57.171735,
+      "cost": 90,
+      "decisions": [
+        {
+          "measureId": "M3",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M8",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M9",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M12"
+        },
+        {
+          "measureId": "M14"
+        }
+      ]
+    },
+    {
+      "numerator": 45735528,
+      "score": 57.16941,
+      "cost": 100,
+      "decisions": [
+        {
+          "measureId": "M3",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M7",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M8",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M11",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M14"
+        }
+      ]
+    },
+    {
+      "numerator": 45699388,
+      "score": 57.124235,
+      "cost": 96,
+      "decisions": [
+        {
+          "measureId": "M3",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M6"
+        },
+        {
+          "measureId": "M8",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M9",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M14"
+        }
+      ]
+    },
+    {
+      "numerator": 45692436,
+      "score": 57.115545,
+      "cost": 97,
+      "decisions": [
+        {
+          "measureId": "M2"
+        },
+        {
+          "measureId": "M3",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M4",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M8",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M9",
+          "districtId": "nura"
+        }
+      ]
+    },
+    {
+      "numerator": 45670100,
+      "score": 57.087625,
+      "cost": 86,
+      "decisions": [
+        {
+          "measureId": "M3",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M8",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M9",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M10",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M12"
+        }
+      ]
+    },
+    {
+      "numerator": 45662772,
+      "score": 57.078465,
+      "cost": 94,
+      "decisions": [
+        {
+          "measureId": "M2"
+        },
+        {
+          "measureId": "M3",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M8",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M9",
+          "districtId": "nura"
+        },
+        {
+          "measureId": "M10",
+          "districtId": "nura"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "topCandidatesViaSimulate": 10,
+    "sampledCandidatesViaCalculate": 696,
+    "independentMeasureSets": 1181,
+    "independentFeasibleScenarios": 694395,
+    "tolerance": 1e-10
+  },
+  "enumerationMs": 350.58,
+  "totalMs": 423.35,
+  "node": "v22.12.0",
+  "createdAt": "2026-09-23T10:37:57.515Z"
+}

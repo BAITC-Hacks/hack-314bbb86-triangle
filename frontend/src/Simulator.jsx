@@ -8,10 +8,11 @@ import {BASELINE,calculate,validate} from '../../shared/engine.mjs';
 import {Results} from './Results.jsx';
 export default function Simulator(){
  const {t,copy,data,number,locale,decisions,setDecisions,errorText}=useApp(),[params]=useSearchParams();
- const [district,setDistrict]=useState(DISTRICTS.some(d=>d.id===params.get('district'))?params.get('district'):'nura'),[filter,setFilter]=useState('all'),[stage,setStage]=useState(2),[analysis,setAnalysis]=useState(null),[result,setResult]=useState(null),[busy,setBusy]=useState(false),[error,setError]=useState(null);const revision=useRef(0);
+ const [district,setDistrict]=useState(DISTRICTS.some(d=>d.id===params.get('district'))?params.get('district'):'nura'),[filter,setFilter]=useState(CATEGORIES.some(c=>c.id===params.get('category'))?params.get('category'):'all'),[stage,setStage]=useState(2),[analysis,setAnalysis]=useState(null),[result,setResult]=useState(null),[busy,setBusy]=useState(false),[error,setError]=useState(null);const revision=useRef(0);
  useEffect(()=>{revision.current++;setAnalysis(null);setResult(null);setStage(2);setBusy(false);},[JSON.stringify(decisions)]);
  useEffect(()=>{revision.current++;setAnalysis(null);setBusy(false);},[locale]);
  const preview=calculate(decisions),check=validate(decisions);
+ const autoReview=useRef(false);useEffect(()=>{if(!autoReview.current&&params.get('review')==='1'&&check.valid){autoReview.current=true;evaluate();}},[]);
  async function evaluate(){const id=++revision.current;setBusy(true);setError(null);try{const r=await api('/api/simulate',{method:'POST',body:{decisions}});if(id!==revision.current)return;setResult(r);setStage(3);window.scrollTo({top:0});const report=await api('/api/analyze',{method:'POST',body:{decisions,locale}});if(id===revision.current)setAnalysis(report);}catch(e){if(id===revision.current)setError(e);}finally{if(id===revision.current)setBusy(false);}}
  function add(m){const d=m.scope==='city'?{measureId:m.id}:{measureId:m.id,districtId:district};const next=[...decisions,d];if(validate(next,{partial:true}).valid)setDecisions(next);}
  return <><PageHead eyebrow={t('brand')} title={stage===3?t('resultTitle'):copy.simulation.title} description={stage===3?t('resultSub'):copy.simulation.description} actions={stage===2?<button className="btn secondary" onClick={()=>setDecisions(structuredClone(EXAMPLE))}>{t('demo')}<ArrowUpRightIcon/></button>:<button className="btn secondary" onClick={()=>setStage(2)}><ArrowLeft size={17}/>{copy.simulation.revise}</button>}/><div className="steps"><Link to="/map"><span>1</span>{t('step1')}</Link><button className={stage===2?'active':'done'} onClick={()=>setStage(2)}><span>{stage===3?<Check size={15}/>:2}</span>{t('step2')}</button><button className={stage===3?'active':''} disabled={!result} onClick={()=>result&&setStage(3)}><span>3</span>{t('step3')}</button></div>{error&&<ErrorBox error={error} retry={evaluate}/>}
@@ -22,3 +23,4 @@ export default function Simulator(){
  </>;
 }
 function ArrowUpRightIcon(){return <ArrowRight size={16}/>;}
+
