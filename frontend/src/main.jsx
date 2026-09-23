@@ -1,0 +1,12 @@
+import React from 'react';
+import {createRoot} from 'react-dom/client';
+import {BrowserRouter,Routes,Route} from 'react-router-dom';
+import {Provider} from './context.jsx';
+import {Layout} from './components.jsx';
+import Home from './Home.jsx';
+import MapPage from './MapPage.jsx';
+import Simulator from './Simulator.jsx';
+import {Scenarios,ScenarioDetail,Leaderboard,Compare} from './Scenarios.jsx';
+import Methodology from './Methodology.jsx';
+import './styles.css';
+createRoot(document.getElementById('root')).render(<BrowserRouter><Provider><Layout><Routes><Route path="/" element={<Home/>}/><Route path="/map" element={<MapPage/>}/><Route path="/simulator" element={<Simulator/>}/><Route path="/scenarios" element={<Scenarios/>}/><Route path="/scenarios/:id" element={<ScenarioDetail/>}/><Route path="/share/:id" element={<ScenarioDetail shared/>}/><Route path="/leaderboard" element={<Leaderboard/>}/><Route path="/compare" element={<Compare/>}/><Route path="/methodology" element={<Methodology/>}/><Route path="*" element={<Home/>}/></Routes></Layout></Provider></BrowserRouter>);

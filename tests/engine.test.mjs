@@ -1,8 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { BASELINE, validate, calculate, simulate, recommend, clip } from '../public/engine.mjs';
-import { DISTRICTS, MEASURES, METRICS, EXAMPLE } from '../public/data.mjs';
-import { readScenarios, saveScenario } from '../public/storage.mjs';
+import { BASELINE, validate, calculate, simulate, recommend, clip } from '../shared/engine.mjs';
+import { DISTRICTS, MEASURES, METRICS, EXAMPLE } from '../shared/data.mjs';
 const near = (a,b) => assert.ok(Math.abs(a-b)<1e-9,`${a} != ${b}`);
 test('dataset invariants: 5 districts, 14 measures, normalized weights and populations',()=>{
   assert.equal(DISTRICTS.length,5); assert.equal(MEASURES.length,14);
@@ -81,12 +80,4 @@ test('recommendations are valid single replacements with verified positive gains
   const recs=recommend(EXAMPLE);assert.ok(recs.length>0);near(recs[0].score,57.20556);
   for(const r of recs) {assert.equal(validate(r.decisions).valid,true);near(simulate(r.decisions).score,r.score);assert.ok(r.gain>0);near(r.gain,r.score-simulate(EXAMPLE).score);}
 });
-test('corrupt storage safely ignored; only valid, versioned scenarios loaded',()=>{
-  const storage={value:'broken',getItem(){return this.value},setItem(k,v){this.value=v}};
-  assert.deepEqual(readScenarios(storage),[]);
-  assert.deepEqual(readScenarios(null),[]);
-  saveScenario(storage,[],'Пример',EXAMPLE);
-  assert.equal(readScenarios(storage).length,1);
-  storage.value='[{"version":"old","name":"старый","decisions":[]}]';
-  assert.deepEqual(readScenarios(storage),[]);
-});
+

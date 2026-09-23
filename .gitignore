@@ -1,6 +1,11 @@
 .env
 .env.*
 !.env.example
+.dev.vars
 node_modules/
-coverage/
+dist/
+.data/
+.sites-runtime/
 *.log
+*.sqlite*
+*.tar.gz
