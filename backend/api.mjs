@@ -34,7 +34,7 @@ export async function api(request,env,identity=null) {
   if(!user)return json({...base,mode:'local',reason:'SIGN_IN_FOR_AI',report:localReport(facts,locale)});
   if(!env.OPENAI_API_KEY)return json({...base,mode:'local',reason:'NO_API_KEY',report:localReport(facts,locale)});
   if(!db)return fail('DATABASE_UNAVAILABLE',503);
-  const key=await hash(JSON.stringify({d:[...input.decisions].sort((a,b)=>a.measureId.localeCompare(b.measureId)),locale,reportVersion:2,version:VERSION,model:env.OPENAI_MODEL||'gpt-4.1-mini'}));
+  const key=await hash(JSON.stringify({d:[...input.decisions].sort((a,b)=>a.measureId.localeCompare(b.measureId)),locale,reportVersion:3,version:VERSION,model:env.OPENAI_MODEL||'gpt-4.1-mini'}));
   const cache=await one(db,'SELECT response_json FROM analyses WHERE id=?',key);
   if(cache)return json({...base,...JSON.parse(cache.response_json),cached:true});
   const day=new Date().toISOString().slice(0,10),minute=new Date().toISOString().slice(0,16);
@@ -77,4 +77,5 @@ export async function api(request,env,identity=null) {
  return fail('NOT_FOUND',404);
  }catch(error){return fail(error.code||'SERVER_ERROR',error.status||500);}
 }
+
 

@@ -7,6 +7,8 @@ Triangle · Astana Innovations · Hackathon track 12
 100 единиц бюджета, пять решений и объяснимый **Astana Quality of Life Score**.
 Интерфейс, каталог инициатив и AI-отчёты доступны на **қазақша / русском / English**.
 
+Сайт: [Открыть AKIM City Lab](https://akim-triangle-city-lab.dimash-islam61.chatgpt.site)
+
 ## Быстрый запуск
 
 Требуется Node.js **22.12+** и npm. Команды из корня репозитория:
@@ -23,7 +25,7 @@ Windows PowerShell: `Copy-Item .env.example .env`. Откройте **http://127
 Ключ считывается только сервером. `.env`, SQLite-файлы и сборки исключены из Git.
 
 ```bash
-npm test                 # 21 проверка модели, API, доступа и SQLite
+npm test                 # 22 проверки модели, API, доступа и SQLite
 npm run build           # React + Worker + миграции базы
 npm start               # локально обслуживать готовую сборку на :3100
 npm run db:generate     # после изменения db/schema.ts
@@ -182,7 +184,7 @@ push ветки → pull request → review → merge. Запись файла �
 
 ## Проверка и развитие
 
-`npm test`: 21 автоматическая проверка. Покрыты исходная формула, пример,
+`npm test`: 22 автоматические проверки. Покрыты исходная формула, пример,
 100/103 единицы, 4/5/6 решений, дубль, неизвестные поля, все конфликты,
 лаги, синергии, отрицательные эффекты, порог 40, рекомендации, владельцы,
 ссылки/рейтинг, гонки запросов, сохранение после перезапуска SQLite,
@@ -215,3 +217,5 @@ copy `.env.example` to `.env`, then `npm run dev`. Tests: `npm test`.
 
 The hosted site is public. Saving and live AI require ChatGPT sign-in;
 maps, scoring and rule-based explanations remain available to guests.
+
+
